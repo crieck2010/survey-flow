@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "survey-flow"
+version = "0.1.0"
+description = "Flow-field rendering engine for surveying and remote sensing: advect particles through surface-current vector fields over a temperature colormap and render mapped.earth-style map frames with a stable frame-manifest contract"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "crieck2010" }]
+keywords = ["surveying", "remote-sensing", "flow-field", "particle-advection", "currents", "map-animation", "dataviz"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: GIS",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+# The engine core (fields + advection + manifest) is stdlib+numpy on purpose.
+# Rendering needs matplotlib (Agg backend); COG input needs rasterio.
+# survey-currents is intentionally NOT a hard dependency — survey-flow
+# consumes its CurrentField via duck typing (and its 4-band COGs via
+# rasterio), so either package installs standalone.
+dependencies = ["numpy>=1.22"]
+
+[project.optional-dependencies]
+render = ["matplotlib>=3.5"]
+raster = ["rasterio>=1.3"]
+full = ["matplotlib>=3.5", "rasterio>=1.3"]
+dev = ["build", "pytest"]
+
+[project.scripts]
+survey-flow = "flow.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/crieck2010/survey-flow"
+Repository = "https://github.com/crieck2010/survey-flow"
+Issues = "https://github.com/crieck2010/survey-flow/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
